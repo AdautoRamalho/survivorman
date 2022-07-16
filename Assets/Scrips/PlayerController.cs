@@ -1,4 +1,3 @@
-using System;
 using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -24,7 +23,7 @@ namespace Scrips
         private NetworkVariable<Vector2> movement = new();
 
         [SerializeField]
-        private NetworkVariable<float> rotation = new();
+        private NetworkVariable<bool> attacking = new();
 
         private void Awake()
         {
@@ -62,20 +61,9 @@ namespace Scrips
 
         private void UpdateServer()
         {
-            // var localTransform = transform;
-            // var position = localTransform.position;
-            // var newPosition = new Vector2(
-            //     position.x + movement.Value.x,
-            //     position.z + movement.Value.y);
-            //
-            // if (Math.Abs(position.x - newPosition.x) < movementTolerance && Math.Abs(position.z - newPosition.y) < movementTolerance)
-            //     return;
-            //
-            // localTransform.position = new Vector3(newPosition.x, 0, newPosition.y);
-
             var body = GetComponent<Rigidbody>();
             body.AddForce(new Vector3(movement.Value.x * Time.deltaTime, 0, movement.Value.y * Time.deltaTime), ForceMode.VelocityChange);
-            body.AddTorque(new Vector3(0, rotation.Value * Time.deltaTime, 0), ForceMode.VelocityChange);
+            //body.AddTorque(new Vector3(0, rotation.Value * Time.deltaTime, 0), ForceMode.VelocityChange);
         }
 
         private void MoveActionOnPerformed(InputAction.CallbackContext context)
@@ -105,7 +93,7 @@ namespace Scrips
         [ServerRpc]
         private void SwingServerRpc(bool isPressing)
         {
-            rotation.Value = isPressing ? 50 : 0;
+            attacking.Value = isPressing;
         }
 
     }
