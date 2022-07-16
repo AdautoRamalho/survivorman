@@ -62,8 +62,10 @@ namespace Scrips
         private void UpdateServer()
         {
             var body = GetComponent<Rigidbody>();
-            body.AddForce(new Vector3(movement.Value.x * Time.deltaTime, 0, movement.Value.y * Time.deltaTime), ForceMode.VelocityChange);
-            //body.AddTorque(new Vector3(0, rotation.Value * Time.deltaTime, 0), ForceMode.VelocityChange);
+            if (attacking.Value)
+                body.AddForce(new Vector3(movement.Value.x * 5 * Time.deltaTime, 0, movement.Value.y * 5 * Time.deltaTime), ForceMode.VelocityChange);
+            else
+                body.AddForce(new Vector3(movement.Value.x * Time.deltaTime, 0, movement.Value.y * Time.deltaTime), ForceMode.VelocityChange);
         }
 
         private void MoveActionOnPerformed(InputAction.CallbackContext context)
